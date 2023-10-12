@@ -13,12 +13,20 @@ name_camp_cars = []
 name_camp_moto = []
 
 while int(len(name_camp_cars)) < camp_cars:
-    name_camp_cars.append({"place": str(input('Ingresa el nombre del campo del parqueadero de carro: ')),'avalible':True})
-    #print(name_camp_cars)
+    try:
+        name_camp_cars.append({"place": str(input('Ingresa el nombre del campo del parqueadero de carro: ')),'avalible':True})
+        if name_camp_cars <=0:
+            print("Ingresa un numero positvo")
+    except ValueError:
+         print("Por favor ingresa un numero valido")
 
 while int(len(name_camp_moto)) < camp_motorcycles:
-    name_camp_moto.append({'place': str(input('Ingresa el nombre del campo del parqueadero de moto: ')),'avalible':True})
-    #print(name_camp_moto)
+    try:
+        name_camp_moto.append({'place': str(input('Ingresa el nombre del campo del parqueadero de moto: ')),'avalible':True})
+        if name_camp_cars <=0:
+            print("Ingresa un numero positvo")
+    except ValueError:
+         print("Por favor ingresa un numero valido")
 
 #Definir tarifa de cobro por tiempo
 cost_frac_car = 2000
@@ -40,145 +48,144 @@ while True:
     if options.isdigit() and options !='1' and options !='2':
      print('NO SE ADMITEN LETRAS SOLO LAS OPCIONES 1 o 2')
      
+
     #Opcion para registrar Moto
     elif options == '1':
-     if len(place_free_moto) > 0 or len(place_free_car) > 0:
-        type_vehicule= input('QUE TIPO DE VEHICULO DESEAS REGISTRAR?\n1.Moto\n2.Carro\nopcion >:')
+        if len(place_free_moto) > 0 or len(place_free_car) > 0:
+                type_vehicule= input('QUE TIPO DE VEHICULO DESEAS REGISTRAR?\n1.Moto\n2.Carro\nopcion >:')
 
-    if type_vehicule.isdigit() and type_vehicule !='1' and type_vehicule !='2':
-      print('NO SE ADMITEN LETRAS SOLO LAS OPCIONES 1 o 2')
+        if type_vehicule.isdigit() and type_vehicule !='1' and type_vehicule !='2':
+            print('NO SE ADMITEN LETRAS SOLO LAS OPCIONES 1 o 2')
 
-        #registrar Moto
-    elif(type_vehicule =='1' and len(place_free_moto) > 0):
+                #registrar Moto
+        elif(type_vehicule =='1' and len(place_free_moto) > 0):
+                #print('ingreso a registrar moto')
+                placa= str(input('POR FAVOR INGRESA LA PLACA DEL VEHICULO >:'))
+                hour_inside= datetime.now().strftime('%Y-%m-%d %H:%M')
+                place_random = random.choice(place_free_moto)
+                #print(place_random)
+                register_motorcycle.append({'place':place_random, 'placa': placa, 'hour_inside': hour_inside, 'Action':'Entro'})
 
-        #print('ingreso a registrar moto')
-        placa= str(input('POR FAVOR INGRESA LA PLACA DEL VEHICULO >:'))
-        hour_inside= datetime.now().strftime('%Y-%m-%d %H:%M')
-        place_random = random.choice(place_free_moto)
-        #print(place_random)
-        register_motorcycle.append({'place':place_random, 'placa': placa, 'hour_inside': hour_inside, 'Action':'Entro'})
+                for x in name_camp_moto:
+                    if x['place'] == place_random:
+                        x['avalible'] = False
+                print('El registro de vehiculos es el siguiente: ', register_motorcycle)
 
-        for x in name_camp_moto:
-            if x['place'] == place_random:
-             x['avalible'] = False
-        print('El registro de vehiculos es el siguiente: ', register_motorcycle)
+            #Registrar Carro
+        elif type_vehicule =='2' and len(place_free_car) > 0:
 
-    #Registrar Carro
-    elif type_vehicule =='2' and len(place_free_car) > 0:
+                #print('ingreso a registrar carro')
+                placa= str(input('POR FAVOR INGRESA LA PLACA DEL VEHICULO >:'))
+                hour_inside= datetime.now().strftime('%Y-%m-%d %H:%M')
+                place_random = random.choice(place_free_car)
+                #print(place_random)
+                register_car.append({'place':place_random, 'placa': placa, 'hour_inside': hour_inside, 'Action':'Entro'})
 
-        #print('ingreso a registrar carro')
-        placa= str(input('POR FAVOR INGRESA LA PLACA DEL VEHICULO >:'))
-        hour_inside= datetime.now().strftime('%Y-%m-%d %H:%M')
-        place_random = random.choice(place_free_car)
-        #print(place_random)
-        register_car.append({'place':place_random, 'placa': placa, 'hour_inside': hour_inside, 'Action':'Entro'})
+                for x in name_camp_cars:
+                    if x['place'] == place_random:
+                        x['avalible'] = False
+                print('El registro de vehiculos es el siguiente: ', register_car)
 
-        for x in name_camp_cars:
-            if x['place'] == place_random:
-             x['avalible'] = False
-        print('El registro de vehiculos es el siguiente: ', register_car)
+        elif len(place_free_moto) == 0:
+            print('PARQUEADERO DE MOTOS LLENO')
+        elif len(place_free_car) == 0:
+            print('PARQUEADERO DE CARROS LLENO')    
+            #print('final',type_vehicule, placa,hour_inside)
 
-    elif len(place_free_moto) == 0:
-        print('PARQUEADERO DE MOTOS LLENO')
-    elif len(place_free_car) == 0:
-        print('PARQUEADERO DE CARROS LLENO')    
-        #print('final',type_vehicule, placa,hour_inside)
+        else:
+            print('POR FAVOR INTRODUZCA UNA SELECCION VALIDA')
+            print('##############################################################################')
 
-    else:
-     print('POR FAVOR INTRODUZCA UNA SELECCION VALIDA')
-     print('##############################################################################')
-
-#     else: 
-#     print('PARQUEADERO LLENO, ESPERE QUE SALGA UN VEHICULO')
+     #print('PARQUEADERO LLENO, ESPERE QUE SALGA UN VEHICULO')
         
             
     #option de retirar un vehiculo, aqui se dira cuanto se cobra y cuanto
     elif options == '2':
-    #juntar las dos listas para buscar el registro en una sola lista
-    option_cash = input('POR FAVOR DIGITE EL TIPO DE VEHICULO A COBRAR\n 1.Moto.\n 2.Carro.\n Opcion: ')
+        #juntar las dos listas para buscar el registro en una sola lista
+        option_cash = input('POR FAVOR DIGITE EL TIPO DE VEHICULO A COBRAR\n 1.Moto.\n 2.Carro.\n Opcion: ')
 
-    if option_cash.isdigit() and option_cash !='1' and option_cash !='2':
-        print('NO SE ADMITEN LETRAS SOLO LAS OPCIONES 1 o 2')
+        if option_cash.isdigit() and option_cash !='1' and option_cash !='2':
+                print('NO SE ADMITEN LETRAS SOLO LAS OPCIONES 1 o 2')
 
-        #Registrar salida de una moto ##############################
-    if option_cash == '1':
-        placa_pay = str(input('POR FAVOR DIGITE LA PLACA A COBRAR: '))
-         
-         #se valida que se encuentre la placa consultada
-    if str([x['Action'] for x in register_motorcycle if x['placa'] == placa_pay and x['Action'] == 'Entro']) == '[]':
-     print('LA PLACA CONSULTADA NO FUE ENCONTRADA')
-     continue
+                #Registrar salida de una moto ##############################
+        if option_cash == '1':
+                placa_pay = str(input('POR FAVOR DIGITE LA PLACA A COBRAR: '))
+                
+                #se valida que se encuentre la placa consultada
+                if str([x['Action'] for x in register_motorcycle if x['placa'] == placa_pay and x['Action'] == 'Entro']) == '[]':
+                    print('LA PLACA CONSULTADA NO FUE ENCONTRADA')
+                    continue
 
-    hour_inside = [x['hour_inside'] for x in register_motorcycle if x['placa'] == placa_pay and x['Action'] == 'Entro']
-    place_out = [x['place'] for x in register_motorcycle if x['placa'] == placa_pay and x['Action'] == 'Entro']
+                hour_inside = [x['hour_inside'] for x in register_motorcycle if x['placa'] == placa_pay and x['Action'] == 'Entro']
+                place_out = [x['place'] for x in register_motorcycle if x['placa'] == placa_pay and x['Action'] == 'Entro']
 
 
-    #calcular tiempo de cobro
+                #calcular tiempo de cobro
 
-    hour_now = datetime.now().strftime('%Y-%m-%d %H:%M')
-    total = datetime.strptime(hour_now, '%Y-%m-%d %H:%M') - datetime.strptime(str(hour_inside[0]), '%Y-%m-%d %H:%M')
-    total = total.total_seconds()
-    total = total / 3600
-    #Convertir el tiempo de parqueo a un entero para poderlo multiplicar por el costo
-    total = math.ceil(total)
-    total = total * cost_frac_moto
-    print('Tu valor a pagar de parqueo es => ',total)
+                hour_now = datetime.now().strftime('%Y-%m-%d %H:%M')
+                total = datetime.strptime(hour_now, '%Y-%m-%d %H:%M') - datetime.strptime(str(hour_inside[0]), '%Y-%m-%d %H:%M')
+                total = total.total_seconds()
+                total = total / 3600
+                #Convertir el tiempo de parqueo a un entero para poderlo multiplicar por el costo
+                total = math.ceil(total)
+                total = total * cost_frac_moto
+                print('Tu valor a pagar de parqueo es => ',total)
 
-    #liberar parqueadero
-    for x in name_camp_moto:
-     if x['place'] == str(place_out[0]):
-      x['avalible'] = True    
-     print('for', name_camp_moto, place_out)
-    #Actualizar volante de salida con hora de salida y pago total para llevar un registro
-    for x in register_motorcycle:
-     if x['placa'] == placa_pay:
-      x['hour_out'] = datetime.now().strftime('%Y-%m-%d %H:%M')
-      x['pay_all'] = total
-      x['Action'] = 'salio'
+                #liberar parqueadero
+                for x in name_camp_moto:
+                    if x['place'] == str(place_out[0]):
+                        x['avalible'] = True    
+                    print('for', name_camp_moto, place_out)
+                    #Actualizar volante de salida con hora de salida y pago total para llevar un registro
 
-    print('los vehiculos motorizados registrados son los siguientes: ', register_motorcycle)
+                for x in register_motorcycle:
+                    if x['placa'] == placa_pay:
+                        x['hour_out'] = datetime.now().strftime('%Y-%m-%d %H:%M')
+                        x['pay_all'] = total
+                        x['Action'] = 'salio'
 
-    #Registrar salida de un carro######################
-    elif option_cash == '2':
-    placa_pay = str(input('POR FAVOR DIGITE LA PLACA A COBRAR: '))
+                print('los vehiculos motorizados registrados son los siguientes: ', register_motorcycle)
 
-    #se valida que se encuentre la placa consultada
-    if str([x['Action'] for x in register_car if x['placa'] == placa_pay and x['Action'] == 'Entro']) == '[]':
-     print('LA PLACA CONSULTADA NO FUE ENCONTRADA')
-     continue
+                #Registrar salida de un carro#
+        elif option_cash == '2':
+                placa_pay = str(input('POR FAVOR DIGITE LA PLACA A COBRAR: '))
 
-    hour_inside = [x['hour_inside'] for x in register_car if x['placa'] == placa_pay and x['Action'] == 'Entro']
-    place_out = [x['place'] for x in register_car if x['placa'] == placa_pay and x['Action'] == 'Entro']
+                #se valida que se encuentre la placa consultada
+                if str([x['Action'] for x in register_car if x['placa'] == placa_pay and x['Action'] == 'Entro']) == '[]':
+                    print('LA PLACA CONSULTADA NO FUE ENCONTRADA')
+                    continue
 
-    #calcular tiempo de cobro
+                hour_inside = [x['hour_inside'] for x in register_car if x['placa'] == placa_pay and x['Action'] == 'Entro']
+                place_out = [x['place'] for x in register_car if x['placa'] == placa_pay and x['Action'] == 'Entro']
 
-    hour_now = datetime.now().strftime('%Y-%m-%d %H:%M')
-    total = datetime.strptime(hour_now, '%Y-%m-%d %H:%M') - datetime.strptime(str(hour_inside[0]), '%Y-%m-%d %H:%M')
-    total = total.total_seconds() 
-    total = total / 3600
+                #calcular tiempo de cobro
 
-    #Convertir el tiempo de parqueo a un entero para poderlo multiplicar por el costo
-    total = math.ceil(total)
-    total = total * cost_frac_car
-    print('Tu valor a pagar de parqueo es => ',total)
+                hour_now = datetime.now().strftime('%Y-%m-%d %H:%M')
+                total = datetime.strptime(hour_now, '%Y-%m-%d %H:%M') - datetime.strptime(str(hour_inside[0]), '%Y-%m-%d %H:%M')
+                total = total.total_seconds() 
+                total = total / 3600
 
-    #liberar parqueadero
-    for x in name_camp_cars:
-     if x['place'] == str(place_out[0]):
-      x['avalible'] = True 
+                #Convertir el tiempo de parqueo a un entero para poderlo multiplicar por el costo
+                total = math.ceil(total)
+                total = total * cost_frac_car
+                print('Tu valor a pagar de parqueo es => ',total)
 
-    print('for', name_camp_cars,place_out)
+                #liberar parqueadero
+                for x in name_camp_cars:
+                    if x['place'] == str(place_out[0]):
+                        x['avalible'] = True 
 
-    #Actualizar volante de salida con hora de salida y 
-    for x in register_car:
-     if x['placa'] == placa_pay:
-      x['hour_out'] = datetime.now().strftime('%Y-%m-%d %H:%M')
-      x['pay_all'] = total
-      x['Action'] = 'salio'
+                print('for', name_camp_cars,place_out)
 
-    print('los vehiculos registrados son los siguientes: ', register_car)
+                #Actualizar volante de salida con hora de salida y 
+                for x in register_car:
+                    if x['placa'] == placa_pay:
+                        x['hour_out'] = datetime.now().strftime('%Y-%m-%d %H:%M')
+                        x['pay_all'] = total
+                        x['Action'] = 'salio'
 
-    else:
-    print('POR FAVOR INTRODUZCA UNA SELECCION VALIDA')
-    else:
-    print('POR FAVOR INTRODUZCA UNA SELECCION VALIDA')
+                print('los vehiculos registrados son los siguientes: ', register_car)
+
+        else:
+            print('POR FAVOR INTRODUZCA UNA SELECCION VALIDA')
+    
