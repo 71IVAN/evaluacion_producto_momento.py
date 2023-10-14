@@ -5,29 +5,36 @@ import math
 #Definir cuantos cupos tiene el parqueadero en motos y carros
 print("////BIENVENIDO AL SISTEMA DE PARQUEADEROS GALVIS////"  )
 print("----------------------------------------------------")
-camp_cars = int(input('Ingresa la cantidad de parqueaderos para carros: '))
-camp_motorcycles = int(input('Ingresa la cantidad de parqueaderos para motos: '))
+camp_cars = None
+camp_motorcycles = None
+
+while camp_cars is None or camp_cars <= 0:
+    try:
+        camp_cars = int(input('Ingresa la cantidad de parqueaderos para carros: '))
+        if camp_cars <= 0:
+            print("Ingresa un número positivo mayor que cero.")
+    except ValueError:
+        print("Por favor ingresa un número válido.")
+
+while camp_motorcycles is None or camp_motorcycles <= 0:
+    try:
+        camp_motorcycles = int(input('Ingresa la cantidad de parqueaderos para motos: '))
+        if camp_motorcycles <= 0:
+            print("Ingresa un número positivo mayor que cero.")
+    except ValueError:
+        print("Por favor ingresa un número válido.")
+
 
 #Definir los campos del parqueadero
 name_camp_cars = []
 name_camp_moto = []
 
 while int(len(name_camp_cars)) < camp_cars:
-    try:
-        name_camp_cars.append({"place": str(input('Ingresa el nombre del campo del parqueadero de carro: ')),'avalible':True})
-        if name_camp_cars <=0:
-            print("Ingresa un numero positvo")
-    except ValueError:
-         print("Por favor ingresa un numero valido")
+    name_camp_cars.append({"place": str(input('Ingresa el nombre del campo del parqueadero de carro: ')),'avalible':True})
 
 while int(len(name_camp_moto)) < camp_motorcycles:
-    try:
-        name_camp_moto.append({'place': str(input('Ingresa el nombre del campo del parqueadero de moto: ')),'avalible':True})
-        if name_camp_cars <=0:
-            print("Ingresa un numero positvo")
-    except ValueError:
-         print("Por favor ingresa un numero valido")
-
+    name_camp_moto.append({'place': str(input('Ingresa el nombre del campo del parqueadero de moto: ')),'avalible':True})
+               
 #Definir tarifa de cobro por tiempo
 cost_frac_car = 2000
 cost_frac_moto = 1000
@@ -43,10 +50,10 @@ while True:
     print('lugares disponibles:',place_free_car,place_free_moto)
 
     print('QUE OPCION DESEAS REALIZAR?')
-    options = input('1. Registrar nuevo vehiculo \n2. Registrar salida de vehiculo:\n opcion >:')
+    options = input('1. Registrar nuevo vehiculo \n2. Registrar salida de vehiculo \n3. Salir. \nopcion >:')
     #Validar que el dato no sean letras
     if options.isdigit() and options !='1' and options !='2':
-     print('NO SE ADMITEN LETRAS SOLO LAS OPCIONES 1 o 2')
+     print('NO SE ADMITEN LETRAS SOLO NUMEROS ELIGE LAS OPCIONES 1 o 2')
      
 
     #Opcion para registrar Moto
@@ -70,8 +77,11 @@ while True:
                     if x['place'] == place_random:
                         x['avalible'] = False
                 print('El registro de vehiculos es el siguiente: ', register_motorcycle)
+                print("\n")
 
-            #Registrar Carro
+
+
+        #Registrar Carro
         elif type_vehicule =='2' and len(place_free_car) > 0:
 
                 #print('ingreso a registrar carro')
@@ -85,6 +95,7 @@ while True:
                     if x['place'] == place_random:
                         x['avalible'] = False
                 print('El registro de vehiculos es el siguiente: ', register_car)
+                print("\n")
 
         elif len(place_free_moto) == 0:
             print('PARQUEADERO DE MOTOS LLENO')
@@ -96,10 +107,10 @@ while True:
             print('POR FAVOR INTRODUZCA UNA SELECCION VALIDA')
             print('##############################################################################')
 
-     #print('PARQUEADERO LLENO, ESPERE QUE SALGA UN VEHICULO')
+#      #print('PARQUEADERO LLENO, ESPERE QUE SALGA UN VEHICULO')
         
             
-    #option de retirar un vehiculo, aqui se dira cuanto se cobra y cuanto
+#     #option de retirar un vehiculo, aqui se dira cuanto se cobra y cuanto
     elif options == '2':
         #juntar las dos listas para buscar el registro en una sola lista
         option_cash = input('POR FAVOR DIGITE EL TIPO DE VEHICULO A COBRAR\n 1.Moto.\n 2.Carro.\n Opcion: ')
@@ -118,14 +129,14 @@ while True:
 
                 hour_inside = [x['hour_inside'] for x in register_motorcycle if x['placa'] == placa_pay and x['Action'] == 'Entro']
                 place_out = [x['place'] for x in register_motorcycle if x['placa'] == placa_pay and x['Action'] == 'Entro']
-
+                
 
                 #calcular tiempo de cobro
 
                 hour_now = datetime.now().strftime('%Y-%m-%d %H:%M')
                 total = datetime.strptime(hour_now, '%Y-%m-%d %H:%M') - datetime.strptime(str(hour_inside[0]), '%Y-%m-%d %H:%M')
                 total = total.total_seconds()
-                total = total / 3600
+                total = total / 60
                 #Convertir el tiempo de parqueo a un entero para poderlo multiplicar por el costo
                 total = math.ceil(total)
                 total = total * cost_frac_moto
@@ -136,17 +147,18 @@ while True:
                     if x['place'] == str(place_out[0]):
                         x['avalible'] = True    
                     print('for', name_camp_moto, place_out)
-                    #Actualizar volante de salida con hora de salida y pago total para llevar un registro
-
+                print("\n")
+                #Actualizar volante de salida con hora de salida y pago total para llevar un registro
                 for x in register_motorcycle:
                     if x['placa'] == placa_pay:
                         x['hour_out'] = datetime.now().strftime('%Y-%m-%d %H:%M')
                         x['pay_all'] = total
-                        x['Action'] = 'salio'
+                        x['Action'] = 'saliendo'
 
                 print('los vehiculos motorizados registrados son los siguientes: ', register_motorcycle)
+                print("\n")
 
-                #Registrar salida de un carro#
+#         #Registrar salida de un carro#
         elif option_cash == '2':
                 placa_pay = str(input('POR FAVOR DIGITE LA PLACA A COBRAR: '))
 
@@ -185,7 +197,15 @@ while True:
                         x['Action'] = 'salio'
 
                 print('los vehiculos registrados son los siguientes: ', register_car)
+    
+   
 
         else:
             print('POR FAVOR INTRODUZCA UNA SELECCION VALIDA')
+    
+
+    elif options.lower() == 'salir':
+        print("Salio del progama")
+        break
+
     
