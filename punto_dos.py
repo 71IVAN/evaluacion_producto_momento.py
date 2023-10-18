@@ -11,7 +11,13 @@
 
 import random
 
-departamentos = {'Amazonas': 'Leticia', 'Antioquia': 'Medellin', 'Arauca': 'Arauca', 'Atlantico': 'Barranquilla', 'Caldas': 'Manizales'}
+departamentos = {
+    'Amazonas': 'Leticia', 
+    'Antioquia': 'Medellin', 
+    'Arauca': 'Arauca', 
+    'Atlantico': 'Barranquilla', 
+    'Caldas': 'Manizales'
+    }
 
 while True:
     print("------ Adivina la capital ------")

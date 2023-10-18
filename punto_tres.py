@@ -13,7 +13,7 @@ def adivina_capital(departamentos):
     departamento, capital = random.choice(list(departamentos.items()))
     return departamento, capital
 
-def main():
+def menu():
     print("------ Adivina la capital ------\n")
     print("Debes adivinar la capital del departamento.")
     print("Tienes 3 intentos, sino quieres jugar escribe 'salir'.")
@@ -26,7 +26,6 @@ def main():
         option = input("¿Qué quieres hacer?  ")
 
         if option == '1' or option == 'go':
-            oportunidades = 0
             departamento, capital = adivina_capital(departamentos)
 
             while oportunidades < 3:
@@ -55,4 +54,4 @@ def main():
             print("Opción inválida. Por favor, elige 'go', '1' o 'salir'.")
 
 if __name__ == "__main__":
-    main()
+    menu()
